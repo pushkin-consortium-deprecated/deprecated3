@@ -1,0 +1,29 @@
+
+version: '2'
+
+services:
+  # whichenglish:
+  #   image: whichenglish:latest
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     NODE_ENV: production
+  #   ports:
+  #     - 3000:3000
+  nginx:
+    image: whichenglish-nginx:latest
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    links: 
+      - api:api
+  api:
+    image: whichenglish-api:latest
+    expose: 
+      - "3000"
+    build:
+      context: ./api
+      dockerfile: Dockerfile
