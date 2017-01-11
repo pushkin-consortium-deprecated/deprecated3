@@ -10,3 +10,6 @@
 [submodule "games-with-words-react"]
 	path = games-with-words-react
 	url = git@github.com:oddballio/games-with-words-react.git
+[submodule "games-with-words-db-writer"]
+	path = games-with-words-db-writer
+	url = git@github.com:oddballio/games-with-words-db-writer.git
