@@ -1,0 +1,9 @@
+[submodule "games-with-words-api"]
+	path = games-with-words-api
+	url = git@github.com:oddballio/games-with-words-api.git
+[submodule "games-with-words-worker"]
+	path = games-with-words-worker
+	url = git@github.com:oddballio/games-with-words-worker.git
+[submodule "games-with-words-nginx"]
+	path = games-with-words-nginx
+	url = git@github.com:oddballio/games-with-words-nginx.git

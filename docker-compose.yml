@@ -2,28 +2,45 @@
 version: '2'
 
 services:
-  # whichenglish:
-  #   image: whichenglish:latest
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   environment:
-  #     NODE_ENV: production
-  #   ports:
-  #     - 3000:3000
   nginx:
-    image: whichenglish-nginx:latest
+    image: games-with-words-nginx:latest
     build:
-      context: ./nginx
+      context: ./games-with-words-nginx
       dockerfile: Dockerfile
     ports:
       - "80:80"
     links: 
       - api:api
   api:
-    image: whichenglish-api:latest
+    image: games-with-words-api:latest
     expose: 
       - "3000"
     build:
-      context: ./api
+      context: ./games-with-words-api
       dockerfile: Dockerfile
+    volumes:
+      - ./api:/usr/src/app
+    depends_on: 
+      - "message-queue"
+    environment:
+      - NODE_ENV=production
+      - AMPQ_ADDRESS=amqp://message-queue:5672     
+    links:
+      - message-queue
+  worker:
+    image: games-with-words-worker:latest
+    build:
+      context: ./games-with-words-worker
+      dockerfile: Dockerfile
+    volumes:
+      - ./worker:/usr/src/app
+    depends_on: 
+      - "message-queue"
+    environment:
+      - AMPQ_ADDRESS=amqp://message-queue:5672     
+    links:
+      - message-queue
+  message-queue:
+    image: rabbitmq
+    expose:
+      - 5672
