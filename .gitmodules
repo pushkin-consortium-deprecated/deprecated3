@@ -7,3 +7,6 @@
 [submodule "games-with-words-nginx"]
 	path = games-with-words-nginx
 	url = git@github.com:oddballio/games-with-words-nginx.git
+[submodule "games-with-words-react"]
+	path = games-with-words-react
+	url = git@github.com:oddballio/games-with-words-react.git
