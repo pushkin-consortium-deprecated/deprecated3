@@ -13,3 +13,6 @@
 [submodule "games-with-words-db-writer"]
 	path = games-with-words-db-writer
 	url = git@github.com:oddballio/games-with-words-db-writer.git
+[submodule "games-with-words-db-worker"]
+	path = games-with-words-db-worker
+	url = git@github.com:oddballio/games-with-words-db-worker.git
