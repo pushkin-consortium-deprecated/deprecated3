@@ -51,7 +51,7 @@ services:
   db-worker:
     image: games-with-words-db-worker:latest
     build:
-      context: ./games-with-words-db-worker<tab>
+      context: ./games-with-words-db-worker
       dockerfile: Dockerfile
     volumes:
       - ./games-with-words-db-worker:/usr/src/app
