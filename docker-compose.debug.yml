@@ -2,6 +2,17 @@
 version: '2'
 
 services:
+  cron:
+      image: pushkinl3/games-with-words-cron
+      build:
+        context: ./games-with-words-cron
+        dockerfile: Dockerfile
+      environment:
+        - AMPQ_ADDRESS=amqp://message-queue:5672
+        - DATABASE_URL=postgres://postgres:postgres@db/games-with-words-development
+      links:
+        - message-queue
+        - db:db
   nginx:
     image: pushkinl3/games-with-words-nginx:latest
     build:
