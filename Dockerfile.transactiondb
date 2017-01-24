@@ -1,0 +1,2 @@
+FROM postgres:latest
+ADD CreateTransactionDB.sql /docker-entrypoint-initdb.d/
