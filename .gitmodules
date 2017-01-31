@@ -16,3 +16,6 @@
 [submodule "games-with-words-db-worker"]
 	path = games-with-words-db-worker
 	url = git@github.com:oddballio/games-with-words-db-worker.git
+[submodule "games-with-words-cron"]
+	path = games-with-words-cron
+	url = git@github.com:oddballio/games-with-words-cron.git
