@@ -25,6 +25,7 @@ DB worker to handle db writes/read logic and schemas
 ## Pushkin Worker
 
 ![](images/worker.png)
+
 Python worker for data analysis
 
 ## Pushkin Cron
