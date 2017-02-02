@@ -20,7 +20,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./games-with-words-api:/usr/src/app
-    command: bash start.debug.sh
+    command: bash start.sh
     depends_on:
       - "message-queue"
     environment:
@@ -35,7 +35,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./games-with-words-worker:/usr/src/app
-    command: bash start.debug.sh
+    command: bash start.sh
     depends_on:
       - "message-queue"
     environment:
@@ -55,7 +55,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./games-with-words-db-worker:/usr/src/app
-    command: bash start.debug.sh
+    command: bash start.sh
     ports:
       - "5858:5858"
       - "6000:6000"
