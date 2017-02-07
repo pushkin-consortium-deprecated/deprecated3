@@ -1,21 +1,21 @@
-[submodule "games-with-words-api"]
-	path = games-with-words-api
-	url = git@github.com:oddballio/games-with-words-api.git
-[submodule "games-with-words-worker"]
-	path = games-with-words-worker
-	url = git@github.com:oddballio/games-with-words-worker.git
-[submodule "games-with-words-nginx"]
-	path = games-with-words-nginx
-	url = git@github.com:oddballio/games-with-words-nginx.git
-[submodule "games-with-words-react"]
-	path = games-with-words-react
-	url = git@github.com:oddballio/games-with-words-react.git
-[submodule "games-with-words-db-writer"]
-	path = games-with-words-db-writer
-	url = git@github.com:oddballio/games-with-words-db-writer.git
-[submodule "games-with-words-db-worker"]
-	path = games-with-words-db-worker
-	url = git@github.com:oddballio/games-with-words-db-worker.git
-[submodule "games-with-words-cron"]
-	path = games-with-words-cron
-	url = git@github.com:oddballio/games-with-words-cron.git
+[submodule "pushkin-api"]
+	path = pushkin-api
+	url = git@github.com:l3atbc/pushkin-api.git
+[submodule "pushkin-worker"]
+	path = pushkin-worker
+	url = git@github.com:l3atbc/pushkin-worker.git
+[submodule "pushkin-nginx"]
+	path = pushkin-nginx
+	url = git@github.com:l3atbc/pushkin-nginx.git
+[submodule "pushkin-react"]
+	path = pushkin-react
+	url = git@github.com:l3atbc/pushkin-react.git
+[submodule "pushkin-db-writer"]
+	path = pushkin-db-writer
+	url = git@github.com:l3atbc/pushkin-db-writer.git
+[submodule "pushkin-db-worker"]
+	path = pushkin-db-worker
+	url = git@github.com:l3atbc/pushkin-db-worker.git
+[submodule "pushkin-cron"]
+	path = pushkin-cron
+	url = git@github.com:l3atbc/pushkin-cron.git
