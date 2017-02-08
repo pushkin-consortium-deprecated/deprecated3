@@ -4,18 +4,18 @@
 [submodule "pushkin-worker"]
 	path = pushkin-worker
 	url = git@github.com:l3atbc/pushkin-worker.git
-[submodule "pushkin-nginx"]
+[submodule "pushkin-server"]
 	path = pushkin-nginx
-	url = git@github.com:l3atbc/pushkin-nginx.git
+	url = git@github.com:l3atbc/pushkin-server.git
 [submodule "pushkin-react"]
 	path = pushkin-react
 	url = git@github.com:l3atbc/pushkin-react.git
 [submodule "pushkin-db-writer"]
 	path = pushkin-db-writer
 	url = git@github.com:l3atbc/pushkin-db-writer.git
-[submodule "pushkin-db-worker"]
-	path = pushkin-db-worker
-	url = git@github.com:l3atbc/pushkin-db-worker.git
+[submodule "pushkin-db"]
+	path = pushkin-db
+	url = git@github.com:l3atbc/pushkin-db.git
 [submodule "pushkin-cron"]
 	path = pushkin-cron
 	url = git@github.com:l3atbc/pushkin-cron.git
