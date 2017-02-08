@@ -5,7 +5,7 @@
 	path = pushkin-worker
 	url = git@github.com:l3atbc/pushkin-worker.git
 [submodule "pushkin-server"]
-	path = pushkin-nginx
+	path = pushkin-server
 	url = git@github.com:l3atbc/pushkin-server.git
 [submodule "pushkin-react"]
 	path = pushkin-react
