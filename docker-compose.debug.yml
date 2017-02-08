@@ -20,7 +20,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./pushkin-api:/usr/src/app
-    command: bash start.sh
+    command: bash start.debug.sh
     depends_on:
       - "message-queue"
     environment:
@@ -35,7 +35,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./pushkin-worker:/usr/src/app
-    command: bash start.sh
+    command: bash start.debug.sh
     depends_on:
       - "message-queue"
     environment:
