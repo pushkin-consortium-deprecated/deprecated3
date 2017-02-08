@@ -1,0 +1,60 @@
+version: '2'
+services:
+  cron:
+    scale: 1
+    start_on_create: true
+  api-balancer:
+    scale: 1
+    start_on_create: true
+    lb_config:
+      certs: []
+      port_rules:
+      - hostname: ''
+        path: /api
+        priority: 1
+        protocol: http
+        service: api
+        source_port: 80
+        target_port: 3000
+      - path: ''
+        priority: 2
+        protocol: http
+        service: nginx
+        source_port: 80
+        target_port: 80
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 42
+      unhealthy_threshold: 3
+      interval: 2000
+  message-queue:
+    scale: 1
+    start_on_create: true
+  db-worker:
+    scale: 1
+    start_on_create: true
+  nginx:
+    scale: 1
+    start_on_create: true
+  transactiondb:
+    scale: 1
+    start_on_create: true
+  api:
+    scale: 2
+    start_on_create: true
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 3000
+      unhealthy_threshold: 3
+      initializing_timeout: 60000
+      interval: 2000
+      strategy: none
+      reinitializing_timeout: 60000
+  worker:
+    scale: 1
+    start_on_create: true
+  db:
+    scale: 1
+    start_on_create: true
