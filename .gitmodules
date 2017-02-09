@@ -7,9 +7,6 @@
 [submodule "pushkin-server"]
 	path = pushkin-server
 	url = git@github.com:l3atbc/pushkin-server.git
-[submodule "pushkin-react"]
-	path = pushkin-react
-	url = git@github.com:l3atbc/pushkin-react.git
 [submodule "pushkin-db-writer"]
 	path = pushkin-db-writer
 	url = git@github.com:l3atbc/pushkin-db-writer.git
@@ -19,3 +16,6 @@
 [submodule "pushkin-cron"]
 	path = pushkin-cron
 	url = git@github.com:l3atbc/pushkin-cron.git
+[submodule "games-with-words-front-end"]
+	path = games-with-words-front-end
+	url = git@github.com:l3atbc/games-with-words-front-end.git
