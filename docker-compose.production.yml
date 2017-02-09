@@ -13,8 +13,6 @@ services:
     ports: 
       - "3000:3000"
     command: bash start.sh
-    # depends_on: 
-    #   - "message-queue"
     environment:
       - NODE_ENV=production
       - AMPQ_ADDRESS=amqp://message-queue:5672     
@@ -23,8 +21,6 @@ services:
   worker:
     image: pushkinl3/games-with-words-worker:latest
     command: bash start.sh
-    # depends_on: 
-    #   - "message-queue"
     environment:
       - AMPQ_ADDRESS=amqp://message-queue:5672     
     links:
@@ -38,8 +34,6 @@ services:
   db-worker:
     image: pushkinl3/games-with-words-db-worker:latest
     command: bash start.sh
-    # depends_on: 
-    #   - "message-queue"
     environment:
       - AMPQ_ADDRESS=amqp://message-queue:5672     
       - DATABASE_URL=postgres://postgres:postgres@db/games-with-words-development
