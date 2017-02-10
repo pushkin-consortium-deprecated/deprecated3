@@ -55,7 +55,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./pushkin-db:/usr/src/app
-    command: bash start.sh
+    command: bash start.debug.sh
     ports:
       - "5858:5858"
       - "6000:6000"
