@@ -1,61 +1,64 @@
-
 version: '2'
-
 services:
-  nginx:
-    image: pushkinl3/games-with-words-nginx:latest
+  cron:
+    image: pushkinl3/games-with-words-cron:latest
+    environment:
+      AMPQ_ADDRESS: amqp://message-queue:5672
+      DATABASE_URL:  "DATABASE_URL"
+    links:
+      - message-queue:message-queue
+  api-balancer:
+    image: rancher/lb-service-haproxy:v0.4.9
     ports:
-      - "80:80"
-    links: 
-      - api:api
-  api:
-    image: pushkinl3/games-with-words-api:latest
-    ports: 
-      - "3000:3000"
-    command: bash start.sh
-    environment:
-      - NODE_ENV=production
-      - AMPQ_ADDRESS=amqp://message-queue:5672     
-    links:
-      - message-queue
-  worker:
-    image: pushkinl3/games-with-words-worker:latest
-    command: bash start.sh
-    environment:
-      - AMPQ_ADDRESS=amqp://message-queue:5672     
-    links:
-      - message-queue
+      - 80:80/tcp
+      - 8080:8080/tcp
+    labels:
+      io.rancher.container.agent.role: environmentAdmin
+      io.rancher.container.create_agent: 'true'
   message-queue:
-    image: rabbitmq:management
-    ports:
-      - 5672
-    ports:
-      - 8080:15672
+    image: rabbitmq
+    expose:
+      - '5672'
   db-worker:
     image: pushkinl3/games-with-words-db-worker:latest
-    command: bash start.sh
     environment:
-      - AMPQ_ADDRESS=amqp://message-queue:5672     
-      - DATABASE_URL=postgres://postgres:postgres@db/games-with-words-development
+      AMPQ_ADDRESS: amqp://message-queue:5672
+      DATABASE_URL:  "DATABASE_URL"
+      TRANSACTION_DATABASE_URL: "TRANSACTION_DATABASE_URL"
     links:
-      - message-queue
-      - db:db
-      - transactiondb:transactiondb
-  db:
-    image: postgres:latest
-    environment: 
-      - "POSTGRES_DB=games-with-words-development"
-      - "POSTGRES_USER=postgres"
-  cron:
-      image: pushkinl3/games-with-words-cron:latest
-      environment:
-        - AMPQ_ADDRESS=amqp://message-queue:5672
-        - DATABASE_URL=postgres://postgres:postgres@db/games-with-words-development
-      links:
-        - message-queue
-        - db:db
-  transactiondb:
-    image: pushkinl3/games-with-words-transactiondb:latest
+      - message-queue:message-queue
+    command:
+      - bash start.sh
+    labels:
+      io.rancher.container.pull_image: always
+  nginx:
+    image: pushkinl3/games-with-words-nginx:latest
+    links:
+      - api:api
+    ports:
+      - 80:80/tcp
+    labels:
+      io.rancher.container.pull_image: always
+  api:
+    image: pushkinl3/games-with-words-api:latest
     environment:
-      - "POSTGRES_DB=transactions"
-      - "POSTGRES_USER=postgres"
+      AMPQ_ADDRESS: amqp://message-queue:5672
+      NODE_ENV: production
+    links:
+      - message-queue:message-queue
+    expose:
+      - '3000'
+    command:
+      - bash start.sh
+    labels:
+      io.rancher.container.pull_image: always
+  worker:
+    image: pushkinl3/games-with-words-worker:latest
+    environment:
+      AMPQ_ADDRESS: amqp://message-queue:5672
+    links:
+      - message-queue:message-queue
+    command:
+      - bash start.sh
+    labels:
+      io.rancher.container.pull_image: always
