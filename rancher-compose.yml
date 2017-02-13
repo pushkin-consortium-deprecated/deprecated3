@@ -37,15 +37,12 @@ services:
   nginx:
     scale: 1
     start_on_create: true
-  transactiondb:
+  api:
     scale: 1
     start_on_create: true
-  api:
-    scale: 2
-    start_on_create: true
     health_check:
-      response_timeout: 2000
       healthy_threshold: 2
+      response_timeout: 2000
       port: 3000
       unhealthy_threshold: 3
       initializing_timeout: 60000
@@ -53,8 +50,5 @@ services:
       strategy: none
       reinitializing_timeout: 60000
   worker:
-    scale: 1
-    start_on_create: true
-  db:
     scale: 1
     start_on_create: true
