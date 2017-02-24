@@ -28,7 +28,8 @@ services:
     links:
       - message-queue:message-queue
     command:
-      - bash start.sh
+      - bash 
+      - start.sh
     labels:
       io.rancher.container.pull_image: always
   nginx:
@@ -49,7 +50,8 @@ services:
     expose:
       - '3000'
     command:
-      - bash start.sh
+      - bash 
+      - start.sh
     labels:
       io.rancher.container.pull_image: always
   worker:
@@ -59,6 +61,7 @@ services:
     links:
       - message-queue:message-queue
     command:
-      - bash start.sh
+      - bash 
+      - start.sh
     labels:
       io.rancher.container.pull_image: always
