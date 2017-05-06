@@ -40,6 +40,7 @@ services:
       - "message-queue"
     environment:
       - AMPQ_ADDRESS=amqp://message-queue:5672
+      - QUEUE=whichenglish
     links:
       - message-queue
   message-queue:
