@@ -1,93 +1,91 @@
-
 version: '2'
-
 services:
   nginx:
-    image: pushkinl3/pushkin-server:latest
+    image: 'pushkinl3/pushkin-server:latest'
     build:
       context: ./pushkin-server
       dockerfile: Dockerfile
     ports:
-      - "80:80"
+      - '80:80'
     links:
-      - api:api
+      - 'api:api'
   api:
-    image: pushkinl3/pushkin-api:latest
+    image: 'pushkinl3/pushkin-api:latest'
     expose:
-      - "3000"
+      - '3000'
     build:
       context: ./pushkin-api
       dockerfile: Dockerfile
     volumes:
-      - ./pushkin-api:/usr/src/app
+      - './pushkin-api:/usr/src/app'
     command: bash start.debug.sh
     depends_on:
-      - "message-queue"
+      - message-queue
     environment:
       - NODE_ENV=production
-      - AMPQ_ADDRESS=amqp://message-queue:5672
+      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
     links:
       - message-queue
   worker:
-    image: pushkinl3/pushkin-worker:latest
+    image: 'pushkinl3/pushkin-worker:latest'
     build:
       context: ./pushkin-worker
       dockerfile: Dockerfile
     volumes:
-      - ./pushkin-worker:/usr/src/app
+      - './pushkin-worker:/usr/src/app'
     command: bash start.debug.sh
     depends_on:
-      - "message-queue"
+      - message-queue
     environment:
-      - AMPQ_ADDRESS=amqp://message-queue:5672
+      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
       - QUEUE=whichenglish
     links:
       - message-queue
   message-queue:
-    image: rabbitmq:management
+    image: 'rabbitmq:management'
     expose:
       - 5672
     ports:
-      - 8080:15672
+      - '8080:15672'
   db-worker:
-    image: pushkinl3/pushkin-db:latest
+    image: 'pushkinl3/pushkin-db:latest'
     build:
       context: ./pushkin-db
       dockerfile: Dockerfile
     volumes:
-      - ./pushkin-db:/usr/src/app
+      - './pushkin-db:/usr/src/app'
     command: bash start.debug.sh
     depends_on:
-      - "message-queue"
+      - message-queue
     environment:
-      - AMPQ_ADDRESS=amqp://message-queue:5672
-      - DATABASE_URL=postgres://postgres:postgres@db/pushkin-development
-      - TRANSACTION_DATABASE_URL=postgres://postgres:postgres@transactiondb/transactions  
+      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
+      - 'DATABASE_URL=postgres://postgres:postgres@db/pushkin-development'
+      - 'TRANSACTION_DATABASE_URL=postgres://postgres:postgres@transactiondb/transactions'
     links:
       - message-queue
-      - db:db
-      - transactiondb:transactiondb
+      - 'db:db'
+      - 'transactiondb:transactiondb'
   db:
-    image: postgres:latest
+    image: 'postgres:latest'
     environment:
-      - "POSTGRES_DB=pushkin-development"
-      - "POSTGRES_USER=postgres"
+      - POSTGRES_DB=pushkin-development
+      - POSTGRES_USER=postgres
   cron:
-      image: pushkinl3/pushkin-cron:latest
-      build:
-        context: ./pushkin-cron
-        dockerfile: Dockerfile
-      environment:
-        - AMPQ_ADDRESS=amqp://message-queue:5672
-        - DATABASE_URL=postgres://postgres:postgres@db/pushkin-development
-      links:
-        - message-queue
-        - db:db
+    image: 'pushkinl3/pushkin-cron:latest'
+    build:
+      context: ./pushkin-cron
+      dockerfile: Dockerfile
+    environment:
+      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
+      - 'DATABASE_URL=postgres://postgres:postgres@db/pushkin-development'
+    links:
+      - message-queue
+      - 'db:db'
   transactiondb:
-    image: pushkinl3/pushkin-transactiondb:latest
+    image: 'pushkinl3/pushkin-transactiondb:latest'
     build:
       context: ./
       dockerfile: Dockerfile.transactiondb
     environment:
-      - "POSTGRES_DB=transactions"
-      - "POSTGRES_USER=postgres"
+      - POSTGRES_DB=transactions
+      - POSTGRES_USER=postgres
