@@ -19,3 +19,9 @@
 [submodule "games-with-words-front-end"]
 	path = games-with-words-front-end
 	url = git@github.com:l3atbc/games-with-words-front-end.git
+[submodule "pushkin-cli"]
+	path = pushkin-cli
+	url = git@github.com:l3atbc/pushkin-cli.git
+[submodule "pushkin-react"]
+	path = pushkin-react
+	url = git@github.com:l3atbc/pushkin-react.git
