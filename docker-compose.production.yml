@@ -22,7 +22,7 @@ services:
   db-worker:
     image: 'pushkinl3/games-with-words-db-worker:latest'
     environment:
-      - AMPQ_ADDRESS='amqp://message-queue:5672'
+      - AMPQ_ADDRESS=''amqp://message-queue:5672
       - DATABASE_URL=DATABASE_URL
       - TRANSACTION_DATABASE_URL=TRANSACTION_DATABASE_URL
     links:
@@ -43,7 +43,7 @@ services:
   api:
     image: 'pushkinl3/games-with-words-api:latest'
     environment:
-      - AMPQ_ADDRESS='amqp://message-queue:5672'
+      - AMPQ_ADDRESS=''amqp://message-queue:5672
       - NODE_ENV=production
     links:
       - 'message-queue:message-queue'
