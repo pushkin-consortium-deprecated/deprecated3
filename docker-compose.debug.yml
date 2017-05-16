@@ -26,21 +26,6 @@ services:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
     links:
       - message-queue
-  worker:
-    image: 'pushkinl3/pushkin-worker:latest'
-    build:
-      context: ./pushkin-worker
-      dockerfile: Dockerfile
-    volumes:
-      - './pushkin-worker:/usr/src/app'
-    command: bash start.debug.sh
-    depends_on:
-      - message-queue
-    environment:
-      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - QUEUE=whichenglish
-    links:
-      - message-queue
   message-queue:
     image: 'rabbitmq:management'
     expose:
