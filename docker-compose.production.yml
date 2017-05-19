@@ -3,8 +3,9 @@ services:
   cron:
     image: 'pushkinl3/games-with-words-cron:latest'
     environment:
-      AMPQ_ADDRESS: 'amqp://message-queue:5672'
-      DATABASE_URL: DATABASE_URL
+      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
+      - 'DATABASE_URL=DB_URL'
+      - 'TRANSACTION_DATABASE_URL=T_DB_URL'
     links:
       - 'message-queue:message-queue'
   api-balancer:
@@ -22,9 +23,10 @@ services:
   db-worker:
     image: 'pushkinl3/games-with-words-db-worker:latest'
     environment:
-      - AMPQ_ADDRESS='amqp://message-queue:5672'
-      - DATABASE_URL=DATABASE_URL
-      - TRANSACTION_DATABASE_URL=TRANSACTION_DATABASE_URL
+      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
+      - 'DATABASE_URL=DB_URL'
+      - 'TRANSACTION_DATABASE_URL=T_DB_URL'
+      - NODE_ENV=production
     links:
       - 'message-queue:message-queue'
     command:
@@ -43,7 +45,7 @@ services:
   api:
     image: 'pushkinl3/games-with-words-api:latest'
     environment:
-      - AMPQ_ADDRESS='amqp://message-queue:5672'
+      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
       - NODE_ENV=production
     links:
       - 'message-queue:message-queue'

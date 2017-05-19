@@ -44,8 +44,8 @@ services:
       - message-queue
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - 'DATABASE_URL=postgres://postgres:postgres@db/pushkin-development'
-      - 'TRANSACTION_DATABASE_URL=postgres://postgres:postgres@transactiondb/transactions'
+      - 'DATABASE_URL=DB_URL'
+      - 'TRANSACTION_DATABASE_URL=T_DB_URL'
     links:
       - message-queue
       - 'db:db'
@@ -62,7 +62,7 @@ services:
       dockerfile: Dockerfile
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - 'DATABASE_URL=postgres://postgres:postgres@db/pushkin-development'
+      - 'DATABASE_URL=DB_URL'
     links:
       - message-queue
       - 'db:db'
