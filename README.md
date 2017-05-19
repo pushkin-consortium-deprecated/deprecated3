@@ -4,35 +4,13 @@ Pushkin is a scalable ecosystem for psychological surveys and tests.
 
 It consists of 5 key parts
 
-## Puskin Client
-![](images/client.png)
+![](http://i.imgur.com/ncRJMJ5.png)
 
-System of react/redux components allowing a user to easily create beautiful modern client friendly surveys using jspsych
-
-## Pushkin API
-
-Api server to handle data from clients
-
-![](images/api.png)
-
-
-## Pushkin DB
-
-![](images/db.png)
-
-DB worker to handle db writes/read logic and schemas
-
-## Pushkin Worker
-
-![](images/worker.png)
-
-Python worker for data analysis
-
-## Pushkin Cron
-
-![](images/cron.png)
-
-System for creating regular scheduled cron jobs for upkeep/management
+#####  [Pushkin-Api](https://github.com/l3atbc/pushkin-api#pushkin-api)
+#####  [Pushkin-Cli](https://github.com/l3atbc/pushkin-cli#pushkin-cli)
+#####  [Pushkin-DB](https://github.com/l3atbc/pushkin-db/blob/master/README.md#pushkin-db)
+#####  [Pushkin-Worker](https://github.com/l3atbc/pushkin-worker#pushkin-worker)
+#####  [Pushkin-Cron](https://github.com/l3atbc/pushkin-cron/blob/master/README.md#overview)
 
 ## Why Pushkin
 
@@ -46,6 +24,11 @@ System for creating regular scheduled cron jobs for upkeep/management
 
 ### Development Mode
 1. docker-compose up -f docker-compose.debug.yml
+
+
+## Deploying
+
+[Deploy Instructions Here](https://github.com/l3atbc/pushkin/blob/master/DEPLOY.md#deploying)
 
 ## Directory Structure
 
@@ -62,6 +45,9 @@ Each one of those files has access to the environment variables created in the d
 DB Connection is available as `DATABASE_URL` and the message queue as `AMPQ_ADDRESS`.
 
 Right now we only support python and node.js cron tabs. feel free to modify the `Dockerfile` to add a different environment you may need.
+
+### Documentation
+Docs can be created by running npm install, then npm run docs.
 
 
 ## Roles and Permissions

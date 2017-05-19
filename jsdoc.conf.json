@@ -1,0 +1,41 @@
+{
+    "tags": {
+        "allowUnknownTags": true
+    },
+    "source": {
+        "include": [
+            "./",
+            "README.md"
+        ],
+        "exclude": [
+            "node_modules",
+            "games-with-words-front-end",
+            "images",
+            "pushkin-api/node_modules",
+            "pushkin-cli/node_modules",
+            "pushkin-db/node_modules",
+            "pushkin-react"
+        ],
+        "includePattern": ".+\\.js(doc)?$",
+        "excludePattern": "(^|\\/|\\\\)_"
+    },
+    "plugins": [],
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": true,
+        "systemName": "remoteFileExplorer",
+        "footer": "Created by Simon Speich",
+        "copyright": "2013",
+        "navType": "vertical",
+        "theme": "spacelab",
+        "linenums": true,
+        "collapseSymbols": true,
+        "inverseNav": false
+    },
+    "opts": {
+        "template": "templates/default",
+        "encoding": "utf8",
+        "destination": "./out/",
+        "recurse": true
+    }
+}
