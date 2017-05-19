@@ -23,9 +23,9 @@
     "templates": {
         "cleverLinks": false,
         "monospaceLinks": true,
-        "systemName": "remoteFileExplorer",
-        "footer": "Created by Simon Speich",
-        "copyright": "2013",
+        "systemName": "pushkin",
+        "footer": "Created by The language learning lab at Boston College",
+        "copyright": "2017",
         "navType": "vertical",
         "theme": "spacelab",
         "linenums": true,
@@ -35,7 +35,7 @@
     "opts": {
         "template": "templates/default",
         "encoding": "utf8",
-        "destination": "./out/",
+        "destination": "./docs/",
         "recurse": true
     }
 }
