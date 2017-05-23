@@ -49,6 +49,29 @@ Right now we only support python and node.js cron tabs. feel free to modify the 
 ### Documentation
 Docs can be created by running npm install, then npm run docs.
 
+JS Docs are available for this project, all the document files are located in your `pushkin/docs` folder. For more information about JS Docs, please visit [JS Docs](http://usejsdoc.org/).
+
+#### Add Js Docs
+You could add a piece of Js Docs anywhere for any functions through out the whole project by using this syntax : 
+```sh
+  /**
+   * creates a new controller with specified name
+   * @method ControllerManager#generate
+   * @param {String} name - name of controller to create
+   * @memberof ControllerManager
+   */
+```
+This will get compiled down in your `pushkin/docs` folder and available for view. Please read the Compile section of this readme for more info.
+
+#### Config
+Please feel free to modify `jsdoc.conf.json` located in your main `pushkin` folder. This config file handles the main configuration of JS Docs compile settings. You could include or exclude any additional source folders for JS Docs to look in or ignore by editing the `include` and `exclude` section of this JSON file. You could also include a README as the home page of your js docs by adding `README.md` in the `include` section of this file. JS Docs looks for the first README.md it could find and make use of that.
+
+#### Compile
+After you've added/deleted/edited/changed any your JS Docs, you will have to recompile for the changes to apply. 
+
+1. make sure you've all npm pacages installed in your 'pushkin' folder by executing `npm install`
+2. execute `npm run docs` to compile
+3. open up `pushkin/docs/index.html` to see your newly updated JS Docs
 
 ## Roles and Permissions
 
