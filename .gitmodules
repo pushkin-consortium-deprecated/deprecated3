@@ -1,0 +1,21 @@
+[submodule "pushkin-api"]
+	path = pushkin-api
+	url = git@github.com:pushkin-consortium/pushkin-api.git
+[submodule "pushkin-worker"]
+	path = pushkin-worker
+	url = git@github.com:pushkin-consortium/pushkin-worker.git
+[submodule "pushkin-server"]
+	path = pushkin-server
+	url = git@github.com:pushkin-consortium/pushkin-server.git
+[submodule "pushkin-db"]
+	path = pushkin-db
+	url = git@github.com:pushkin-consortium/pushkin-db.git
+[submodule "pushkin-cron"]
+	path = pushkin-cron
+	url = git@github.com:pushkin-consortium/pushkin-cron.git
+[submodule "pushkin-cli"]
+	path = pushkin-cli
+	url = git@github.com:pushkin-consortium/pushkin-cli.git
+[submodule "pushkin-react"]
+	path = pushkin-react
+	url = git@github.com:pushkin-consortium/pushkin-react.git
