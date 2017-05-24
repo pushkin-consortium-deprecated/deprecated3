@@ -1,27 +1,21 @@
 [submodule "pushkin-api"]
 	path = pushkin-api
-	url = git@github.com:l3atbc/pushkin-api.git
+	url = git@github.com:pushkin-consortium/pushkin-api.git
 [submodule "pushkin-worker"]
 	path = pushkin-worker
-	url = git@github.com:l3atbc/pushkin-worker.git
+	url = git@github.com:pushkin-consortium/pushkin-worker.git
 [submodule "pushkin-server"]
 	path = pushkin-server
-	url = git@github.com:l3atbc/pushkin-server.git
-[submodule "pushkin-db-writer"]
-	path = pushkin-db-writer
-	url = git@github.com:l3atbc/pushkin-db-writer.git
+	url = git@github.com:pushkin-consortium/pushkin-server.git
 [submodule "pushkin-db"]
 	path = pushkin-db
-	url = git@github.com:l3atbc/pushkin-db.git
+	url = git@github.com:pushkin-consortium/pushkin-db.git
 [submodule "pushkin-cron"]
 	path = pushkin-cron
-	url = git@github.com:l3atbc/pushkin-cron.git
-[submodule "games-with-words-front-end"]
-	path = games-with-words-front-end
-	url = git@github.com:l3atbc/games-with-words-front-end.git
+	url = git@github.com:pushkin-consortium/pushkin-cron.git
 [submodule "pushkin-cli"]
 	path = pushkin-cli
-	url = git@github.com:l3atbc/pushkin-cli.git
+	url = git@github.com:pushkin-consortium/pushkin-cli.git
 [submodule "pushkin-react"]
 	path = pushkin-react
-	url = git@github.com:l3atbc/pushkin-react.git
+	url = git@github.com:pushkin-consortium/pushkin-react.git
