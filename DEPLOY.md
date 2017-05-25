@@ -187,3 +187,12 @@ type `{` and you can get an idea of the other tags that are available.
 ```
 
 
+
+### Updating
+If you tweak your local infrastructure and need to deploy the new services there is a 4 step process.
+
+1. Create the new docker image locally following the instructions above.
+2. Push the image to docker hub
+3. [Update the service in the UI](https://docs.rancher.com/rancher/v1.5/en/cattle/upgrading/#in-service-upgrade) **Make sure to select "Pull Image before creating"**
+4. Watch for fails, rollback as needed
+
