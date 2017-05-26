@@ -16,3 +16,6 @@
 [submodule "pushkin-cli"]
 	path = pushkin-cli
 	url = https://github.com/pushkin-consortium/pushkin-cli.git
+[submodule "pushkin-react"]
+	path = pushkin-react
+	url = https://github.com/pushkin-consortium/pushkin-react.git
