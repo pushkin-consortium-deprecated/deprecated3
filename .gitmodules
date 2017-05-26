@@ -4,9 +4,6 @@
 [submodule "pushkin-react"]
 	path = pushkin-react
 	url = https://github.com/pushkin-consortium/pushkin-react.git
-[submodule "gww-front-end"]
-	path = gww-front-end
-	url = https://github.com/gameswithwords/gww-front-end.git
 [submodule "gww-server"]
 	path = gww-server
 	url = https://github.com/gameswithwords/gww-server.git
