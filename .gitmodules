@@ -1,18 +1,3 @@
-[submodule "pushkin-api"]
-	path = pushkin-api
-	url = https://github.com/pushkin-consortium/pushkin-api.git
-[submodule "pushkin-worker"]
-	path = pushkin-worker
-	url = https://github.com/pushkin-consortium/pushkin-worker.git
-[submodule "pushkin-server"]
-	path = pushkin-server
-	url = https://github.com/pushkin-consortium/pushkin-server.git
-[submodule "pushkin-db"]
-	path = pushkin-db
-	url = https://github.com/pushkin-consortium/pushkin-db.git
-[submodule "pushkin-cron"]
-	path = pushkin-cron
-	url = https://github.com/pushkin-consortium/pushkin-cron.git
 [submodule "pushkin-cli"]
 	path = pushkin-cli
 	url = https://github.com/pushkin-consortium/pushkin-cli.git
