@@ -19,3 +19,6 @@
 [submodule "gww-cron"]
 	path = gww-cron
 	url = https://github.com/gameswithwords/gww-cron.git
+[submodule "gww-front-end"]
+	path = gww-front-end
+	url = https://github.com/gameswithwords/gww-front-end.git
