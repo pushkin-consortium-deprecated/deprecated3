@@ -1,23 +1,23 @@
 version: '2'
 services:
   nginx:
-    image: 'pushkinl3/pushkin-server:latest'
+    image: 'gww/gww-server:latest'
     build:
-      context: ./pushkin-server
+      context: ./gww-server
       dockerfile: Dockerfile
     ports:
       - '80:80'
     links:
       - 'api:api'
   api:
-    image: 'pushkinl3/pushkin-api:latest'
+    image: 'gww/gww-api:latest'
     expose:
       - '3000'
     build:
-      context: ./pushkin-api
+      context: ./gww-api
       dockerfile: Dockerfile
     volumes:
-      - './pushkin-api:/usr/src/app'
+      - './gww-api:/usr/src/app'
     command: bash start.debug.sh
     depends_on:
       - message-queue
@@ -29,16 +29,16 @@ services:
   message-queue:
     image: 'rabbitmq:management'
     expose:
-      - 5672
+      - '5672'
     ports:
       - '8080:15672'
   db-worker:
-    image: 'pushkinl3/pushkin-db:latest'
+    image: 'gww/gww-db:latest'
     build:
-      context: ./pushkin-db
+      context: ./gww-db
       dockerfile: Dockerfile
     volumes:
-      - './pushkin-db:/usr/src/app'
+      - './gww-db:/usr/src/app'
     command: bash start.debug.sh
     depends_on:
       - message-queue
@@ -53,12 +53,16 @@ services:
   db:
     image: 'postgres:latest'
     environment:
-      - POSTGRES_DB=pushkin-development
+      - POSTGRES_DB=gww-dev
       - POSTGRES_USER=postgres
+    expose:
+      - '5432'
+    ports:
+      - '5432:5432'
   cron:
-    image: 'pushkinl3/pushkin-cron:latest'
+    image: 'gww/gww-cron:latest'
     build:
-      context: ./pushkin-cron
+      context: ./gww-cron
       dockerfile: Dockerfile
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
@@ -67,10 +71,14 @@ services:
       - message-queue
       - 'db:db'
   transactiondb:
-    image: 'pushkinl3/pushkin-transactiondb:latest'
+    image: 'gww/gww-transactiondb:latest'
     build:
       context: ./
       dockerfile: Dockerfile.transactiondb
     environment:
-      - POSTGRES_DB=transactions
+      - POSTGRES_DB=gww-transactions-dev
       - POSTGRES_USER=postgres
+    expose:
+      - '5432'
+    ports:
+      - '5433:5432'

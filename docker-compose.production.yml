@@ -1,7 +1,7 @@
 version: '2'
 services:
   cron:
-    image: 'pushkinl3/games-with-words-cron:latest'
+    image: 'gww/gww-cron:latest'
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
       - 'DATABASE_URL=DB_URL'
@@ -21,7 +21,7 @@ services:
     expose:
       - '5672'
   db-worker:
-    image: 'pushkinl3/games-with-words-db-worker:latest'
+    image: 'gww/gww-db:latest'
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
       - 'DATABASE_URL=DB_URL'
@@ -35,7 +35,7 @@ services:
     labels:
       io.rancher.container.pull_image: always
   nginx:
-    image: 'pushkinl3/games-with-words-nginx:latest'
+    image: 'gww/gww-server:latest'
     links:
       - 'api:api'
     ports:
@@ -43,7 +43,7 @@ services:
     labels:
       io.rancher.container.pull_image: always
   api:
-    image: 'pushkinl3/games-with-words-api:latest'
+    image: 'gww/gww-api:latest'
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
       - NODE_ENV=production
