@@ -23,7 +23,7 @@ It consists of 5 key parts
 ## Getting started
 
 ### Development Mode
-1. docker-compose up docker-compose.debug.yml -f
+1. docker-compose -f docker-compose.debug.yml up
 
 
 ## Deploying
