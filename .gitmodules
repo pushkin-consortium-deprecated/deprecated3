@@ -1,0 +1,15 @@
+[submodule "db-worker"]
+	path = db-worker
+	url = https://github.com/pushkin-consortium/db-worker.git
+[submodule "react-components"]
+	path = react-components
+	url = https://github.com/pushkin-consortium/react-components.git
+[submodule "server"]
+	path = server
+	url = https://github.com/pushkin-consortium/server.git
+[submodule "api"]
+	path = api
+	url = https://github.com/pushkin-consortium/api.git
+[submodule "cron"]
+	path = cron
+	url = https://github.com/pushkin-consortium/cron.git
