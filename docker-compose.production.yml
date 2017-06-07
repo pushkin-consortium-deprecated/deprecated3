@@ -4,8 +4,8 @@ services:
     image: 'gww/gww-cron:latest'
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - 'DATABASE_URL=DB_URL'
-      - 'TRANSACTION_DATABASE_URL=T_DB_URL'
+      - DATABASE_URL=DB_URL
+      - TRANSACTION_DATABASE_URL=T_DB_URL
     links:
       - 'message-queue:message-queue'
   api-balancer:
@@ -24,8 +24,8 @@ services:
     image: 'gww/gww-db:latest'
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - 'DATABASE_URL=DB_URL'
-      - 'TRANSACTION_DATABASE_URL=T_DB_URL'
+      - DATABASE_URL=DB_URL
+      - TRANSACTION_DATABASE_URL=T_DB_URL
       - NODE_ENV=production
     links:
       - 'message-queue:message-queue'
@@ -56,3 +56,15 @@ services:
       - start.sh
     labels:
       io.rancher.container.pull_image: always
+  whichenglish-worker:
+    image: 'pushkinl3/pushkin-worker:latest'
+    volumes:
+      - './pushkin-worker:/usr/src/app'
+    command: bash start.sh
+    depends_on:
+      - message-queue
+    environment:
+      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
+      - QUEUE=whichenglish
+    links:
+      - message-queue

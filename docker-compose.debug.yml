@@ -44,8 +44,8 @@ services:
       - message-queue
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - 'DATABASE_URL=DB_URL'
-      - 'TRANSACTION_DATABASE_URL=T_DB_URL'
+      - DATABASE_URL=postgres://postgres@db:5432/gww-dev
+      - TRANSACTION_DATABASE_URL=postgres://postgres@transactiondb:5432/gww-transactions-dev
     links:
       - message-queue
       - 'db:db'
@@ -66,7 +66,7 @@ services:
       dockerfile: Dockerfile
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - 'DATABASE_URL=DB_URL'
+      - DATABASE_URL=DB_URL
     links:
       - message-queue
       - 'db:db'
@@ -82,3 +82,18 @@ services:
       - '5432'
     ports:
       - '5433:5432'
+  whichenglish-worker:
+    image: 'pushkinl3/pushkin-worker:latest'
+    build:
+      context: ./whichenglish-worker
+      dockerfile: Dockerfile
+    volumes:
+      - './whichenglish-worker:/usr/src/app'
+    command: bash start.debug.sh
+    depends_on:
+      - message-queue
+    environment:
+      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
+      - QUEUE=whichenglish
+    links:
+      - message-queue

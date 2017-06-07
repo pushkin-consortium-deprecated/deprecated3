@@ -13,9 +13,6 @@
 [submodule "gww-api"]
 	path = gww-api
 	url = https://github.com/gameswithwords/gww-api.git
-[submodule "gww-worker"]
-	path = gww-worker
-	url = https://github.com/gameswithwords/gww-worker.git
 [submodule "gww-cron"]
 	path = gww-cron
 	url = https://github.com/gameswithwords/gww-cron.git
