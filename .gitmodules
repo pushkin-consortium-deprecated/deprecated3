@@ -1,0 +1,15 @@
+[submodule "front-end"]
+	path = front-end
+	url = https://github.com/gameswithwords/front-end.git
+[submodule "api"]
+	path = api
+	url = https://github.com/gameswithwords/api.git
+[submodule "server"]
+	path = server
+	url = https://github.com/gameswithwords/server.git
+[submodule "db-worker"]
+	path = db-worker
+	url = https://github.com/gameswithwords/db-worker.git
+[submodule "cron"]
+	path = cron
+	url = https://github.com/gameswithwords/cron.git
