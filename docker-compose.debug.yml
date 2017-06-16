@@ -1,23 +1,23 @@
 version: '2'
 services:
-  nginx:
-    image: 'pushkinl3/pushkin-server:latest'
+  server:
+    image: 'DOCKERHUB_ID/server:latest'
     build:
-      context: ./pushkin-server
+      context: ./server
       dockerfile: Dockerfile
     ports:
       - '80:80'
     links:
       - 'api:api'
   api:
-    image: 'pushkinl3/pushkin-api:latest'
+    image: 'DOCKERHUB_ID/api:latest'
     expose:
       - '3000'
     build:
-      context: ./pushkin-api
+      context: ./api
       dockerfile: Dockerfile
     volumes:
-      - './pushkin-api:/usr/src/app'
+      - './api:/usr/src/app'
     command: bash start.debug.sh
     depends_on:
       - message-queue
@@ -29,23 +29,23 @@ services:
   message-queue:
     image: 'rabbitmq:management'
     expose:
-      - 5672
+      - '5672'
     ports:
       - '8080:15672'
   db-worker:
-    image: 'pushkinl3/pushkin-db:latest'
+    image: 'DOCKERHUB_ID/db-worker:latest'
     build:
-      context: ./pushkin-db
+      context: ./db-worker
       dockerfile: Dockerfile
     volumes:
-      - './pushkin-db:/usr/src/app'
+      - './db-worker:/usr/src/app'
     command: bash start.debug.sh
     depends_on:
       - message-queue
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - 'DATABASE_URL=DB_URL'
-      - 'TRANSACTION_DATABASE_URL=T_DB_URL'
+      - DATABASE_URL=postgres://postgres@db:5432/dev
+      - TRANSACTION_DATABASE_URL=postgres://postgres@transactiondb:5432/transactions-dev
     links:
       - message-queue
       - 'db:db'
@@ -53,24 +53,32 @@ services:
   db:
     image: 'postgres:latest'
     environment:
-      - POSTGRES_DB=pushkin-development
+      - POSTGRES_DB=dev
       - POSTGRES_USER=postgres
+    expose:
+      - '5432'
+    ports:
+      - '5432:5432'
   cron:
-    image: 'pushkinl3/pushkin-cron:latest'
+    image: 'DOCKERHUB_ID/cron:latest'
     build:
-      context: ./pushkin-cron
+      context: ./cron
       dockerfile: Dockerfile
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - 'DATABASE_URL=DB_URL'
+      - 'DATABASE_URL=postgres://postgres@db:5432/dev'
     links:
       - message-queue
       - 'db:db'
   transactiondb:
-    image: 'pushkinl3/pushkin-transactiondb:latest'
+    image: 'DOCKERHUB_ID/transactiondb:latest'
     build:
       context: ./
       dockerfile: Dockerfile.transactiondb
     environment:
-      - POSTGRES_DB=transactions
+      - POSTGRES_DB=transactions-dev
       - POSTGRES_USER=postgres
+    expose:
+      - '5432'
+    ports:
+      - '5433:5432'
