@@ -1,23 +1,23 @@
 version: '2'
 services:
-  nginx:
-    image: 'gww/gww-server:latest'
+  server:
+    image: 'DOCKERHUB_ID/server:latest'
     build:
-      context: ./gww-server
+      context: ./server
       dockerfile: Dockerfile
     ports:
       - '80:80'
     links:
       - 'api:api'
   api:
-    image: 'gww/gww-api:latest'
+    image: 'DOCKERHUB_ID/api:latest'
     expose:
       - '3000'
     build:
-      context: ./gww-api
+      context: ./api
       dockerfile: Dockerfile
     volumes:
-      - './gww-api:/usr/src/app'
+      - './api:/usr/src/app'
     command: bash start.debug.sh
     depends_on:
       - message-queue
@@ -33,19 +33,19 @@ services:
     ports:
       - '8080:15672'
   db-worker:
-    image: 'gww/gww-db:latest'
+    image: 'DOCKERHUB_ID/db:latest'
     build:
-      context: ./gww-db
+      context: ./db-worker
       dockerfile: Dockerfile
     volumes:
-      - './gww-db:/usr/src/app'
+      - './db-worker:/usr/src/app'
     command: bash start.debug.sh
     depends_on:
       - message-queue
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - DATABASE_URL=postgres://postgres@db:5432/gww-dev
-      - TRANSACTION_DATABASE_URL=postgres://postgres@transactiondb:5432/gww-transactions-dev
+      - DATABASE_URL=postgres://postgres@db:5432/dev
+      - TRANSACTION_DATABASE_URL=postgres://postgres@transactiondb:5432/transactions-dev
     links:
       - message-queue
       - 'db:db'
@@ -53,47 +53,33 @@ services:
   db:
     image: 'postgres:latest'
     environment:
-      - POSTGRES_DB=gww-dev
+      - POSTGRES_DB=dev
       - POSTGRES_USER=postgres
     expose:
       - '5432'
     ports:
       - '5432:5432'
   cron:
-    image: 'gww/gww-cron:latest'
+    image: 'DOCKERHUB_ID/cron:latest'
     build:
-      context: ./gww-cron
+      context: ./cron
       dockerfile: Dockerfile
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - DATABASE_URL=DB_URL
+      - 'DATABASE_URL=postgres://postgres@db:5432/dev'
     links:
       - message-queue
       - 'db:db'
   transactiondb:
-    image: 'gww/gww-transactiondb:latest'
+    image: 'DOCKERHUB_ID/transactiondb:latest'
     build:
       context: ./
       dockerfile: Dockerfile.transactiondb
     environment:
-      - POSTGRES_DB=gww-transactions-dev
+      - POSTGRES_DB=transactions-dev
       - POSTGRES_USER=postgres
     expose:
       - '5432'
     ports:
       - '5433:5432'
-  whichenglish-worker:
-    image: 'pushkinl3/pushkin-worker:latest'
-    build:
-      context: ./whichenglish-worker
-      dockerfile: Dockerfile
-    volumes:
-      - './whichenglish-worker:/usr/src/app'
-    command: bash start.debug.sh
-    depends_on:
-      - message-queue
-    environment:
-      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - QUEUE=whichenglish
-    links:
-      - message-queue
+      
