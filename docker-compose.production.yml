@@ -57,9 +57,9 @@ services:
     labels:
       io.rancher.container.pull_image: always
   whichenglish-worker:
-    image: 'pushkinl3/pushkin-worker:latest'
+    image: 'DOCKERHUB_ID/whichenglish:latest'
     volumes:
-      - './pushkin-worker:/usr/src/app'
+      - './workers/whichenglish:/usr/src/app'
     command: bash start.sh
     depends_on:
       - message-queue
