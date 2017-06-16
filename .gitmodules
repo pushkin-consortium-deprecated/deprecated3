@@ -13,6 +13,3 @@
 [submodule "cron"]
 	path = cron
 	url = https://github.com/pushkin-consortium/cron.git
-[submodule "exp-workers"]
-	path = exp-workers
-	url = https://github.com/pushkin-consortium/exp-workers.git
