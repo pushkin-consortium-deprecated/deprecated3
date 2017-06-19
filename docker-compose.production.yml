@@ -56,7 +56,7 @@ services:
       - start.sh
     labels:
       io.rancher.container.pull_image: always
-  whichenglish-worker:
+  whichenglish:
     image: 'DOCKERHUB_ID/whichenglish:latest'
     volumes:
       - './workers/whichenglish:/usr/src/app'
