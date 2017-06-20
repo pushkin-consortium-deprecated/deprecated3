@@ -1,7 +1,7 @@
 version: '2'
 services:
   server:
-    image: 'DOCKERHUB_ID/server:latest'
+    image: 'dockerhub_id/server:latest'
     build:
       context: ./server
       dockerfile: Dockerfile
@@ -10,7 +10,7 @@ services:
     links:
       - 'api:api'
   api:
-    image: 'DOCKERHUB_ID/api:latest'
+    image: 'dockerhub_id/api:latest'
     expose:
       - '3000'
     build:
@@ -33,7 +33,7 @@ services:
     ports:
       - '8080:15672'
   db-worker:
-    image: 'DOCKERHUB_ID/db:latest'
+    image: 'dockerhub_id/db-worker:latest'
     build:
       context: ./db-worker
       dockerfile: Dockerfile
@@ -44,8 +44,9 @@ services:
       - message-queue
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - DATABASE_URL=postgres://postgres@db:5432/dev
-      - TRANSACTION_DATABASE_URL=postgres://postgres@transactiondb:5432/transactions-dev
+      - 'DATABASE_URL=postgres://postgres@db:5432/dev'
+      - >-
+        TRANSACTION_DATABASE_URL=postgres://postgres@transactiondb:5432/transactions-dev
     links:
       - message-queue
       - 'db:db'
@@ -60,7 +61,7 @@ services:
     ports:
       - '5432:5432'
   cron:
-    image: 'DOCKERHUB_ID/cron:latest'
+    image: 'dockerhub_id/cron:latest'
     build:
       context: ./cron
       dockerfile: Dockerfile
@@ -71,7 +72,7 @@ services:
       - message-queue
       - 'db:db'
   transactiondb:
-    image: 'DOCKERHUB_ID/transactiondb:latest'
+    image: 'dockerhub_id/transactiondb:latest'
     build:
       context: ./
       dockerfile: Dockerfile.transactiondb
@@ -83,7 +84,7 @@ services:
     ports:
       - '5433:5432'
   whichenglish:
-    image: 'DOCKERHUB_ID/whichenglish:latest'
+    image: 'dockerhub_id/whichenglish:latest'
     build:
       context: ./workers/whichenglish
       dockerfile: Dockerfile
@@ -97,4 +98,3 @@ services:
       - QUEUE=whichenglish
     links:
       - message-queue
-      
