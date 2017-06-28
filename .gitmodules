@@ -13,6 +13,3 @@
 [submodule "cron"]
 	path = cron
 	url = https://github.com/gameswithwords/cron.git
-[submodule "workers"]
-	path = workers
-	url = https://github.com/gameswithwords/workers.git

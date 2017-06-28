@@ -1,0 +1,36 @@
+type,prompt,trial
+survey-multi-picture,Click on the picture that best matches the sentence: The dog was chased by the cat,WhichEnglish
+survey-multi-picture,Click on the picture that best matches the sentence: It was the chicken that scared the lion.,WhichEnglish
+survey-multi-picture,Click on the picture that best matches the sentence: It was the lion that the elephant bit,WhichEnglish
+survey-multi-picture,Click on the picture that best matches the sentence: Every hiker climbed a hill.,WhichEnglish
+survey-multi-picture,Click on the picture that best matches the sentence: It was the tiger that the monkey hugged.,WhichEnglish
+survey-multi-picture,Click on the picture that best matches the sentence: It was the monkey that pushed the bear.,WhichEnglish
+survey-multi-picture,Click on the picture that best matches the sentence: The dog was pushed by the cat.,WhichEnglish
+survey-multi-picture,Click on the picture that best matches the sentence: Every child rode an elephant.,WhichEnglish
+survey-multi-choice,Which of the following sentences sounds most natural?9,WhichEnglish
+survey-multi-choice,Which of the following sentences sounds most natural?10,WhichEnglish
+survey-multi-select,Which of the following sentences sounds most natural?11,WhichEnglish
+survey-multi-select,Which of the following sentences sounds most natural?12,WhichEnglish
+survey-multi-select,Which of the following sentences sounds most natural? 13,WhichEnglish
+survey-multi-select,Which of the following sentences sounds most natural? 14,WhichEnglish
+survey-multi-select,Which of the following sentences sounds most natural? 15,WhichEnglish
+survey-multi-select,Which of the following sentences sounds most natural? 16,WhichEnglish
+survey-multi-select,Which of the following sentences sounds most natural? 17,WhichEnglish
+survey-multi-select,Which of the following sentences sounds most natural? 18,WhichEnglish
+survey-multi-select,Which of the following sentences sounds most natural? 19,WhichEnglish
+survey-multi-select,Which of the following sentences sounds most natural? 20,WhichEnglish
+survey-multi-select,Which of the following sentences sounds most natural? 21,WhichEnglish
+survey-multi-select,Which of the following sentences sounds most natural? 22,WhichEnglish
+survey-multi-select,Which of the following sentences sounds most natural? 23,WhichEnglish
+survey-multi-select,Which of the following sentences sounds most natural? 24,WhichEnglish
+survey-multi-select,Which of the following sentences sounds most natural? 25,WhichEnglish
+survey-multi-select,Which of the following sentences sounds most natural? 26,WhichEnglish
+survey-multi-select,Which of the following sentences sounds most natural? 27,WhichEnglish
+survey-multi-select,Which of the following sentences sounds most natural? 28,WhichEnglish
+survey-multi-select,Which of the following sentences sounds most natural? 29,WhichEnglish
+survey-multi-select,Which of the following sentences sounds most natural? 30,WhichEnglish
+survey-multi-select,Which of the following sentences sounds most natural? 31,WhichEnglish
+survey-multi-select,Which of these sentences is grammatical? 1,WhichEnglish
+survey-multi-select,Which of these sentences is grammatical? 2,WhichEnglish
+survey-multi-select,Which of these sentences is grammatical? 3,WhichEnglish
+survey-multi-select,Which of these sentences is grammatical? 4,WhichEnglish

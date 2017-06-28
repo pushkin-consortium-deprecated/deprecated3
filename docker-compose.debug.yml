@@ -98,3 +98,18 @@ services:
       - QUEUE=whichenglish
     links:
       - message-queue
+  listener:
+    image: 'DOCKERHUB_ID/listener:latest'
+    build:
+      context: ./workers/listener
+      dockerfile: Dockerfile
+    volumes:
+      - './workers/listener:/usr/src/app'
+    command: bash start.debug.sh
+    depends_on:
+      - message-queue
+    environment:
+      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
+      - QUEUE=listener
+    links:
+      - message-queue
