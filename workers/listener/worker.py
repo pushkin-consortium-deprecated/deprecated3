@@ -3,6 +3,7 @@ import os
 import pika
 from rpc.RPCClient import RPCClient
 from rpc.RPC import RPC
+import json
 
 
 try:
@@ -10,7 +11,7 @@ try:
     PREFIX = os.environ.get('QUEUE')
 except BaseException as error:
     print error
-    print "Couldnt find AMPQ_ADDRESS in environment"
+    print "Couldn't find AMPQ_ADDRESS in environment"
 
 
 parameters = pika.URLParameters(RABBIT_LINK)
@@ -57,72 +58,26 @@ def callback(ch, method, properties, body):
     # print " METHOD %r" % rpc.method
     # print " params %r" % rpc.params
     # print "properties %r" % properties
-    if rpc.method == 'getQuestion':
-        if 'questionId' in rpc.params:
-            question_id = rpc.params['questionId']
-            print "Finding question with %r" % question_id
-            # question = client.call(json.dumps({
-            #     'method': 'findQuestion',
-            #     'params': [question_id]
-            # }))
-            # print "QUESTION: %r" % question
-            # # Pretty self explanatory,
-            # # get a user, the question they just answered, and their choice
-            # if 'userId' in params:
-            #     user_id = params['userId']
-            #     print "Finding user with %r" % user_id
-            #     user = client.call(json.dumps({
-            #         'method': 'findUser',
-            #         'params': [user_id]
-            #     }))
-            #     print "USER: %r" % user
-            # if 'choiceId' in params:
-            #     choice_id = params['choiceId']
-            #     print "Finding choice with %r" % choice_id
-            #     choice = client.call(json.dumps({
-            #         'method': 'findChoice',
-            #         'params': [choice_id]
-            #     }))
-            #     print "CHOICE: %r" % choice
+    if rpc.method == 'getAllStimuli':
 
-            new_id = question_id + 2
-            send_rpc = RPC()
-            send_rpc.method = 'findQuestion'
-            send_rpc.params = [new_id, ['choices']]
-            routing_key = PREFIX + '_rpc_worker'
-            result = client.call(send_rpc.to_JSON())
-            correlation_id = properties.correlation_id
-            reply_to = properties.reply_to
-
-            # key here is we pass this off to the db worker
-            # it replies to the original channel with the original
-            # correlation_id
-            try:
-                channel.basic_publish(
-                    exchange='',
-                    routing_key=properties.reply_to,
-                    body=result,
-                    properties=pika.BasicProperties(
-                        delivery_mode=2,
-                        correlation_id=correlation_id,
-                    )
-                )
-                ch.basic_ack(delivery_tag=method.delivery_tag)
-                return 1
-            except BaseException as error:
-                print "Couldnt publish"
-        else:
-            print "Cannot get next question without at least the questionId"
-            ch.basic_ack(delivery_tag=method.delivery_tag)
-    elif rpc.method == 'getInitialQuestions':
         send_rpc = RPC()
-        send_rpc.method = 'getInitialQuestions'
+        send_rpc.method = 'getAllStimuli'
         send_rpc.params = []
         routing_key = PREFIX + '_rpc_worker'
-        results = client.call(send_rpc.to_JSON())
+
+        results = json.loads(client.call(send_rpc.to_JSON()))
+
+        allStims = results['stimuli']
+        stims = []
+        for stim in allStims[0:36]:
+            stims.append(stim['stimulus'])
+
+        user = results['user']['id']
+
+        body = json.dumps({'stimuli': stims, 'user': user})
+
         correlation_id = properties.correlation_id
         reply_to = properties.reply_to
-        body = results
         reply_to = properties.reply_to
         channel.basic_publish(
             exchange='',
@@ -167,7 +122,7 @@ def callback(ch, method, properties, body):
         ch.basic_ack(delivery_tag=method.delivery_tag)
         return 1
     else:
-        print "Couldnt find a delivery mechanism for %r" % parameters
+        print "Couldn't find a delivery mechanism for %r" % parameters
         return 1
 
 channel.basic_qos(prefetch_count=1)

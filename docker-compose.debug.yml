@@ -99,7 +99,7 @@ services:
     links:
       - message-queue
   listener:
-    image: 'DOCKERHUB_ID/listener:latest'
+    image: 'dockerhub_id/listener:latest'
     build:
       context: ./workers/listener
       dockerfile: Dockerfile
@@ -113,3 +113,4 @@ services:
       - QUEUE=listener
     links:
       - message-queue
+
