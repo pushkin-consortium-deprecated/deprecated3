@@ -66,4 +66,23 @@ services:
       - QUEUE=ListenerQuiz
     links:
       - message-queue
-      
+  TestQuiz:
+    image: 'DOCKERHUB_ID/TestQuiz:latest'
+    command: bash start.sh
+    depends_on:
+      - message-queue
+    environment:
+      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
+      - QUEUE=TestQuiz
+    links:
+      - message-queue
+  test:
+    image: 'DOCKERHUB_ID/test:latest'
+    command: bash start.sh
+    depends_on:
+      - message-queue
+    environment:
+      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
+      - QUEUE=test
+    links:
+      - message-queue
