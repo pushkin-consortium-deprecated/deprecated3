@@ -83,34 +83,18 @@ services:
       - '5432'
     ports:
       - '5433:5432'
-  whichenglish:
-    image: 'dockerhub_id/whichenglish:latest'
+  ListenerQuiz:
+    image: 'dockerhub_id/listenerquiz:latest'
     build:
-      context: ./workers/whichenglish
+      context: ./workers/ListenerQuiz
       dockerfile: Dockerfile
     volumes:
-      - './workers/whichenglish:/usr/src/app'
+      - './workers/ListenerQuiz:/usr/src/app'
     command: bash start.debug.sh
     depends_on:
       - message-queue
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - QUEUE=whichenglish
+      - QUEUE=ListenerQuiz
     links:
       - message-queue
-  listener:
-    image: 'dockerhub_id/listener:latest'
-    build:
-      context: ./workers/listener
-      dockerfile: Dockerfile
-    volumes:
-      - './workers/listener:/usr/src/app'
-    command: bash start.debug.sh
-    depends_on:
-      - message-queue
-    environment:
-      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - QUEUE=listener
-    links:
-      - message-queue
-

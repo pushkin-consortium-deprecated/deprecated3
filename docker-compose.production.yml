@@ -56,25 +56,14 @@ services:
       - start.sh
     labels:
       io.rancher.container.pull_image: always
-  whichenglish:
-    image: 'DOCKERHUB_ID/whichenglish:latest'
-    volumes:
-      - './workers/whichenglish:/usr/src/app'
+  ListenerQuiz:
+    image: 'DOCKERHUB_ID/listenerquiz:latest'
     command: bash start.sh
     depends_on:
       - message-queue
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - QUEUE=whichenglish
+      - QUEUE=ListenerQuiz
     links:
       - message-queue
-  listener:
-    image: 'DOCKERHUB_ID/pushkin-worker:latest'
-    command: bash start.sh
-    depends_on:
-      - message-queue
-    environment:
-      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - QUEUE=listener
-    links:
-      - message-queue
+      

@@ -3,6 +3,10 @@ import os
 import pika
 from rpc.RPCClient import RPCClient
 from rpc.RPC import RPC
+import json
+
+from operator import itemgetter
+from random import shuffle
 
 
 try:
@@ -57,72 +61,53 @@ def callback(ch, method, properties, body):
     # print " METHOD %r" % rpc.method
     # print " params %r" % rpc.params
     # print "properties %r" % properties
-    if rpc.method == 'getQuestion':
-        if 'questionId' in rpc.params:
-            question_id = rpc.params['questionId']
-            print "Finding question with %r" % question_id
-            # question = client.call(json.dumps({
-            #     'method': 'findQuestion',
-            #     'params': [question_id]
-            # }))
-            # print "QUESTION: %r" % question
-            # # Pretty self explanatory,
-            # # get a user, the question they just answered, and their choice
-            # if 'userId' in params:
-            #     user_id = params['userId']
-            #     print "Finding user with %r" % user_id
-            #     user = client.call(json.dumps({
-            #         'method': 'findUser',
-            #         'params': [user_id]
-            #     }))
-            #     print "USER: %r" % user
-            # if 'choiceId' in params:
-            #     choice_id = params['choiceId']
-            #     print "Finding choice with %r" % choice_id
-            #     choice = client.call(json.dumps({
-            #         'method': 'findChoice',
-            #         'params': [choice_id]
-            #     }))
-            #     print "CHOICE: %r" % choice
+    if rpc.method == 'getAllStimuli':
 
-            new_id = question_id + 2
-            send_rpc = RPC()
-            send_rpc.method = 'findQuestion'
-            send_rpc.params = [new_id, ['choices']]
-            routing_key = PREFIX + '_rpc_worker'
-            result = client.call(send_rpc.to_JSON())
-            correlation_id = properties.correlation_id
-            reply_to = properties.reply_to
-
-            # key here is we pass this off to the db worker
-            # it replies to the original channel with the original
-            # correlation_id
-            try:
-                channel.basic_publish(
-                    exchange='',
-                    routing_key=properties.reply_to,
-                    body=result,
-                    properties=pika.BasicProperties(
-                        delivery_mode=2,
-                        correlation_id=correlation_id,
-                    )
-                )
-                ch.basic_ack(delivery_tag=method.delivery_tag)
-                return 1
-            except BaseException as error:
-                print "Couldn't publish"
-        else:
-            print "Cannot get next question without at least the questionId"
-            ch.basic_ack(delivery_tag=method.delivery_tag)
-    elif rpc.method == 'getInitialQuestions':
         send_rpc = RPC()
-        send_rpc.method = 'getInitialQuestions'
+        send_rpc.method = 'getAllStimuli'
         send_rpc.params = []
         routing_key = PREFIX + '_rpc_worker'
-        results = client.call(send_rpc.to_JSON())
+
+        results = json.loads(client.call(send_rpc.to_JSON()))
+
+        stimuli = results['stimuli']
+
+        user = results['user']['id']
+
+        for stim in stimuli:
+            stim['num_responses']=int(stim['num_responses'])
+
+        sorted_stimuli=sorted(stimuli, key = itemgetter('num_responses'))
+        print(sorted_stimuli)
+
+        last=sorted_stimuli[35]['num_responses']
+
+        final_list=[]
+
+        for i in range (len(sorted_stimuli)):
+            if sorted_stimuli[i]['num_responses']<last:
+                final_list.append(sorted_stimuli[i])
+
+        equal_list=[]
+
+        for i in range (len(sorted_stimuli)):
+            if sorted_stimuli[i]['num_responses']==last:
+                equal_list.append(sorted_stimuli[i])
+                                
+        shuffle(equal_list)
+
+        for i in range (36-len(final_list)):
+            final_list.append(equal_list[i])
+
+        finalStims = []
+
+        for stim in final_list:
+            finalStims.append(stim['stimulus'])
+
+        body = json.dumps({'stimuli': finalStims, 'user': user})
+
         correlation_id = properties.correlation_id
         reply_to = properties.reply_to
-        body = results
         reply_to = properties.reply_to
         channel.basic_publish(
             exchange='',
