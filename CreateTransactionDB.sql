@@ -1,5 +1,6 @@
-create table transactions (
+CREATE TABLE transactions (
    id  SERIAL PRIMARY KEY,
-   query TEXT not null,
-   bindings TEXT
+   query TEXT NOT NULL,
+   bindings TEXT,
+   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )

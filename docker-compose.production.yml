@@ -1,88 +1,88 @@
 version: '2'
 services:
   cron:
-    image: 'gww/gww-cron:latest'
+    image: 'gameswithwords/server:latest'
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - DATABASE_URL=DB_URL
-      - TRANSACTION_DATABASE_URL=T_DB_URL
+      - DATABASE_URL=postgres://gww:Amwtb2016!@gww-db.cjto8h4s9y7b.us-east-1.rds.amazonaws.com:5432/gww_db
+      - TRANSACTION_DATABASE_URL=postgres://gww:Amwtb2016!@gww-transactions-db.cjto8h4s9y7b.us-east-1.rds.amazonaws.com:5432/gww_transactions_db
     links:
-      - 'message-queue:message-queue'
-  api-balancer:
-    image: 'rancher/lb-service-haproxy:v0.4.9'
+      - message-queue
+  load-balancer:
+    image: 'rancher/lb-service-haproxy'
     ports:
-      - '80:80/tcp'
-      - '8080:8080/tcp'
+      - '80:80'
+      - '8080:8080'
     labels:
       io.rancher.container.agent.role: environmentAdmin
       io.rancher.container.create_agent: 'true'
-  message-queue:
-    image: rabbitmq
-    expose:
-      - '5672'
   db-worker:
-    image: 'gww/gww-db:latest'
+    image: 'gameswithwords/db-worker:latest'
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - DATABASE_URL=DB_URL
-      - TRANSACTION_DATABASE_URL=T_DB_URL
+      - DATABASE_URL=postgres://gww:Amwtb2016!@gww-db.cjto8h4s9y7b.us-east-1.rds.amazonaws.com:5432/gww_db
+      - TRANSACTION_DATABASE_URL=postgres://gww:Amwtb2016!@gww-transactions-db.cjto8h4s9y7b.us-east-1.rds.amazonaws.com:5432/gww_transactions_db
       - NODE_ENV=production
     links:
-      - 'message-queue:message-queue'
+      - message-queue
     command:
       - bash
       - start.sh
-    labels:
-      io.rancher.container.pull_image: always
-  nginx:
-    image: 'gww/gww-server:latest'
-    links:
-      - 'api:api'
-    ports:
-      - '80:80/tcp'
-    labels:
-      io.rancher.container.pull_image: always
+  server:
+    image: 'gameswithwords/server:latest'
+    expose:
+      - '80'
   api:
-    image: 'gww/gww-api:latest'
+    image: 'gameswithwords/api:latest'
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
       - NODE_ENV=production
     links:
-      - 'message-queue:message-queue'
+      - message-queue
     expose:
       - '3000'
     command:
       - bash
       - start.sh
+  message-queue:
+    image: 'gameswithwords/message-queue:latest'
+    environment:
+      CONFD_ARGS: --interval 5
+      RABBITMQ_CLUSTER_PARTITION_HANDLING: autoheal
+      RABBITMQ_NET_TICKTIME: '60'
+    volumes_from:
+    - message-queue-datavolume
     labels:
-      io.rancher.container.pull_image: always
-  ListenerQuiz:
-    image: 'DOCKERHUB_ID/listenerquiz:latest'
+      io.rancher.sidekicks: message-queue-base,message-queue-datavolume
+      io.rancher.container.hostname_override: container_name
+  message-queue-datavolume:
+    image: 'rabbitmq:3.6-management'
+    entrypoint:
+    - /bin/true
+    volumes:
+    - /etc/rabbitmq
+    - /opt/rancher/bin
+    labels:
+      io.rancher.container.start_once: 'true'
+      io.rancher.container.hostname_override: container_name
+  message-queue-base:
+    image: 'rabbitmq:3.6-management'
+    environment:
+      RABBITMQ_ERLANG_COOKIE: message-queue-cookie
+    entrypoint:
+    - /opt/rancher/bin/run.sh
+    network_mode: container:message-queue
+    volumes_from:
+    - message-queue-datavolume
+    labels:
+      io.rancher.container.hostname_override: container_name
+  listener-quiz:
+    image: 'gameswithwords/listener-quiz:latest'
     command: bash start.sh
     depends_on:
       - message-queue
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - QUEUE=ListenerQuiz
-    links:
-      - message-queue
-  TestQuiz:
-    image: 'DOCKERHUB_ID/TestQuiz:latest'
-    command: bash start.sh
-    depends_on:
-      - message-queue
-    environment:
-      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - QUEUE=TestQuiz
-    links:
-      - message-queue
-  test:
-    image: 'DOCKERHUB_ID/test:latest'
-    command: bash start.sh
-    depends_on:
-      - message-queue
-    environment:
-      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - QUEUE=test
+      - QUEUE=listener-quiz
     links:
       - message-queue
