@@ -1,51 +1,52 @@
 version: '2'
 services:
-  cron:
-    image: 'gameswithwords/server:latest'
+  api:
+    image: gameswithwords/api:latest
     environment:
-      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
+      - AMPQ_ADDRESS=amqp://message-queue:5672
+      - NODE_ENV=production
+    links:
+      - message-queue
+    command:
+      - bash
+      - start.sh
+    labels:
+      io.rancher.scheduler.global: 'true'
+  cron:
+    image: gameswithwords/server:latest
+    environment:
+      - AMPQ_ADDRESS=amqp://message-queue:5672
       - DATABASE_URL=postgres://gww:Amwtb2016!@gww-db.cjto8h4s9y7b.us-east-1.rds.amazonaws.com:5432/gww_db
       - TRANSACTION_DATABASE_URL=postgres://gww:Amwtb2016!@gww-transactions-db.cjto8h4s9y7b.us-east-1.rds.amazonaws.com:5432/gww_transactions_db
     links:
       - message-queue
-  load-balancer:
-    image: 'rancher/lb-service-haproxy'
-    ports:
-      - '80:80'
-      - '8080:8080'
     labels:
+      io.rancher.scheduler.global: 'true'
+  db-worker:
+    image: gameswithwords/db-worker:latest
+    environment:
+      - AMPQ_ADDRESS=amqp://message-queue:5672
+      - DATABASE_URL=postgres://gww:Amwtb2016!@gww-db.cjto8h4s9y7b.us-east-1.rds.amazonaws.com:5432/gww_db
+      - TRANSACTION_DATABASE_URL=postgres://gww:Amwtb2016!@gww-transactions-db.cjto8h4s9y7b.us-east-1.rds.amazonaws.com:5432/gww_transactions_db
+      - NODE_ENV=production
+    links:
+      - message-queue
+    command:
+      - bash
+      - start.sh
+    labels:
+      io.rancher.scheduler.global: 'true'
+  load-balancer:
+    image: rancher/lb-service-haproxy
+    ports:
+      - '80'
+      - '443'
+    labels:
+      io.rancher.scheduler.global: 'true'
       io.rancher.container.agent.role: environmentAdmin
       io.rancher.container.create_agent: 'true'
-  db-worker:
-    image: 'gameswithwords/db-worker:latest'
-    environment:
-      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - DATABASE_URL=postgres://gww:Amwtb2016!@gww-db.cjto8h4s9y7b.us-east-1.rds.amazonaws.com:5432/gww_db
-      - TRANSACTION_DATABASE_URL=postgres://gww:Amwtb2016!@gww-transactions-db.cjto8h4s9y7b.us-east-1.rds.amazonaws.com:5432/gww_transactions_db
-      - NODE_ENV=production
-    links:
-      - message-queue
-    command:
-      - bash
-      - start.sh
-  server:
-    image: 'gameswithwords/server:latest'
-    expose:
-      - '80'
-  api:
-    image: 'gameswithwords/api:latest'
-    environment:
-      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - NODE_ENV=production
-    links:
-      - message-queue
-    expose:
-      - '3000'
-    command:
-      - bash
-      - start.sh
   message-queue:
-    image: 'gameswithwords/message-queue:latest'
+    image: gameswithwords/message-queue:latest
     environment:
       CONFD_ARGS: --interval 5
       RABBITMQ_CLUSTER_PARTITION_HANDLING: autoheal
@@ -53,20 +54,11 @@ services:
     volumes_from:
     - message-queue-datavolume
     labels:
+      io.rancher.scheduler.global: 'true'
       io.rancher.sidekicks: message-queue-base,message-queue-datavolume
       io.rancher.container.hostname_override: container_name
-  message-queue-datavolume:
-    image: 'rabbitmq:3.6-management'
-    entrypoint:
-    - /bin/true
-    volumes:
-    - /etc/rabbitmq
-    - /opt/rancher/bin
-    labels:
-      io.rancher.container.start_once: 'true'
-      io.rancher.container.hostname_override: container_name
   message-queue-base:
-    image: 'rabbitmq:3.6-management'
+    image: rabbitmq:3.6-management
     environment:
       RABBITMQ_ERLANG_COOKIE: message-queue-cookie
     entrypoint:
@@ -76,13 +68,31 @@ services:
     - message-queue-datavolume
     labels:
       io.rancher.container.hostname_override: container_name
+  message-queue-datavolume:
+    image: rabbitmq:3.6-management
+    entrypoint:
+    - /bin/true
+    volumes:
+    - /etc/rabbitmq
+    - /opt/rancher/bin
+    labels:
+      io.rancher.container.start_once: 'true'
+      io.rancher.container.hostname_override: container_name
+  server:
+    image: gameswithwords/server:latest
+    labels:
+      io.rancher.scheduler.global: 'true'
   listener-quiz:
-    image: 'gameswithwords/listener-quiz:latest'
+    image: gameswithwords/listener-quiz:latest
     command: bash start.sh
     depends_on:
       - message-queue
     environment:
-      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
+      - AMPQ_ADDRESS=amqp://message-queue:5672
       - QUEUE=listener-quiz
     links:
       - message-queue
+    labels:
+      io.rancher.scheduler.global: 'true'
+
+

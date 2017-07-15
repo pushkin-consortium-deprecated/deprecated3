@@ -1,58 +1,35 @@
 version: '2'
 services:
-  server:
-    image: 'gameswithwords/server:latest'
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    ports:
-      - '80:80'
-    links:
-      - 'api:api'
   api:
-    image: 'gameswithwords/api:latest'
+    image: gameswithwords/api:latest
     expose:
       - '3000'
     build:
       context: ./api
       dockerfile: Dockerfile
     volumes:
-      - './api:/usr/src/app'
+      - ./api:/usr/src/app
     command: bash start.debug.sh
     depends_on:
       - message-queue
     environment:
       - NODE_ENV=production
-      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
+      - AMPQ_ADDRESS=amqp://message-queue:5672
     links:
       - message-queue
-  message-queue:
-    image: 'rabbitmq:management'
-    expose:
-      - '5672'
-    ports:
-      - '8080:15672'
-  db-worker:
-    image: 'gameswithwords/db-worker:latest'
+  cron:
+    image: gameswithwords/cron:latest
     build:
-      context: ./db-worker
+      context: ./cron
       dockerfile: Dockerfile
-    volumes:
-      - './db-worker:/usr/src/app'
-    command: bash start.debug.sh
-    depends_on:
-      - message-queue
     environment:
-      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - 'DATABASE_URL=postgres://postgres@db:5432/dev'
-      - >-
-        TRANSACTION_DATABASE_URL=postgres://postgres@transactiondb:5432/transactions-dev
+      - AMPQ_ADDRESS=amqp://message-queue:5672
+      - DATABASE_URL=postgres://postgres@db:5432/dev
     links:
       - message-queue
-      - 'db:db'
-      - 'transactiondb:transactiondb'
+      - db
   db:
-    image: 'postgres:latest'
+    image: postgres:latest
     environment:
       - POSTGRES_DB=dev
       - POSTGRES_USER=postgres
@@ -60,19 +37,41 @@ services:
       - '5432'
     ports:
       - '5432:5432'
-  cron:
-    image: 'gameswithwords/cron:latest'
+  db-worker:
+    image: gameswithwords/db-worker:latest
     build:
-      context: ./cron
+      context: ./db-worker
       dockerfile: Dockerfile
+    volumes:
+      - ./db-worker:/usr/src/app
+    command: bash start.debug.sh
+    depends_on:
+      - message-queue
     environment:
-      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - 'DATABASE_URL=postgres://postgres@db:5432/dev'
+      - AMPQ_ADDRESS=amqp://message-queue:5672
+      - DATABASE_URL=postgres://postgres@db:5432/dev
+      - TRANSACTION_DATABASE_URL=postgres://postgres@transactiondb:5432/transactions-dev
     links:
       - message-queue
-      - 'db:db'
+      - db
+      - transactiondb
+  message-queue:
+    image: rabbitmq:management
+    expose:
+      - '5672'
+    ports:
+      - '8080:15672'
+  server:
+    image: gameswithwords/server:latest
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - '80:80'
+    links:
+      - api
   transactiondb:
-    image: 'gameswithwords/transactiondb:latest'
+    image: gameswithwords/transactiondb:latest
     build:
       context: ./
       dockerfile: Dockerfile.transactiondb
@@ -84,17 +83,17 @@ services:
     ports:
       - '5433:5432'
   listener-quiz:
-    image: 'gameswithwords/listener-quiz:latest'
+    image: gameswithwords/listener-quiz:latest
     build:
       context: ./workers/listener-quiz
       dockerfile: Dockerfile
     volumes:
-      - './workers/listener-quiz:/usr/src/app'
+      - ./workers/listener-quiz:/usr/src/app
     command: bash start.debug.sh
     depends_on:
       - message-queue
     environment:
-      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
+      - AMPQ_ADDRESS=amqp://message-queue:5672
       - QUEUE=listener-quiz
     links:
       - message-queue

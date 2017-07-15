@@ -1,36 +1,5 @@
 version: '2'
 services:
-  cron:
-    scale: 1
-    start_on_create: true
-  load-balancer:
-    scale: 1
-    start_on_create: true
-    lb_config:
-      certs: []
-      port_rules:
-      - path: ''
-        protocol: http
-        service: server
-        source_port: 80
-        target_port: 80
-      - path: /api
-        protocol: http
-        service: api
-        source_port: 80
-        target_port: 3000
-    health_check:
-      healthy_threshold: 2
-      response_timeout: 2000
-      port: 42
-      unhealthy_threshold: 3
-      interval: 2000
-  db-worker:
-    scale: 1
-    start_on_create: true
-  server:
-    scale: 1
-    start_on_create: true
   api:
     scale: 1
     start_on_create: true
@@ -43,7 +12,48 @@ services:
       interval: 2000
       strategy: none
       reinitializing_timeout: 60000
+  cron:
+    scale: 1
+    start_on_create: true
+  db-worker:
+    scale: 1
+    start_on_create: true
+  load-balancer:
+    scale: 1
+    start_on_create: true
+    lb_config:
+      config: |-
+        frontend http-frontend
+            bind *:80
+            mode http
+            redirect scheme https code 302 if !{ ssl_fc }
+      default_cert: gameswithwords
+      port_rules:
+      - protocol: http
+        selector: dummy
+        source_port: 80
+      - path: ''
+        protocol: https
+        service: server
+        source_port: 443
+        target_port: 80
+      - path: /api
+        protocol: https
+        service: api
+        source_port: 443
+        target_port: 3000
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 42
+      unhealthy_threshold: 3
+      interval: 2000
   message-queue:
+    metadata:
+      message-queue: *id001
+    scale: 1
+    start_on_create: true
+  message-queue-base:
     metadata:
       message-queue: *id001
     scale: 1
@@ -55,9 +65,7 @@ services:
           node.name: $${HOSTNAME}
     scale: 1
     start_on_create: true
-  message-queue-base:
-    metadata:
-      message-queue: *id001
+  server:
     scale: 1
     start_on_create: true
   listener-quiz:
