@@ -10,8 +10,6 @@ services:
     command:
       - bash
       - start.sh
-    labels:
-      io.rancher.scheduler.global: 'true'
   cron:
     image: gameswithwords/server:latest
     environment:
@@ -20,8 +18,6 @@ services:
       - TRANSACTION_DATABASE_URL=postgres://gww:Amwtb2016!@gww-transactions-db.cjto8h4s9y7b.us-east-1.rds.amazonaws.com:5432/gww_transactions_db
     links:
       - message-queue
-    labels:
-      io.rancher.scheduler.global: 'true'
   db-worker:
     image: gameswithwords/db-worker:latest
     environment:
@@ -34,8 +30,6 @@ services:
     command:
       - bash
       - start.sh
-    labels:
-      io.rancher.scheduler.global: 'true'
   load-balancer:
     image: rancher/lb-service-haproxy
     ports:
@@ -54,7 +48,6 @@ services:
     volumes_from:
     - message-queue-datavolume
     labels:
-      io.rancher.scheduler.global: 'true'
       io.rancher.sidekicks: message-queue-base,message-queue-datavolume
       io.rancher.container.hostname_override: container_name
   message-queue-base:
@@ -80,8 +73,6 @@ services:
       io.rancher.container.hostname_override: container_name
   server:
     image: gameswithwords/server:latest
-    labels:
-      io.rancher.scheduler.global: 'true'
   listener-quiz:
     image: gameswithwords/listener-quiz:latest
     command: bash start.sh
@@ -92,7 +83,3 @@ services:
       - QUEUE=listener-quiz
     links:
       - message-queue
-    labels:
-      io.rancher.scheduler.global: 'true'
-
-

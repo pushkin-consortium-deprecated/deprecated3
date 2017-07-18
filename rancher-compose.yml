@@ -1,7 +1,6 @@
 version: '2'
 services:
   api:
-    scale: 1
     start_on_create: true
     health_check:
       healthy_threshold: 2
