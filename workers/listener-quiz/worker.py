@@ -120,37 +120,37 @@ def callback(ch, method, properties, body):
         ch.basic_ack(delivery_tag=method.delivery_tag)
         return 1
 
-    elif rpc.method == 'getResults':
-        # this method is called when a user needs to get results,
-        # feel free to make other rpc calls in here
-        # and any data analysis that is needed
-        send_rpc = RPC()
-        send_rpc.method = 'getResults'
-        send_rpc.params = [rpc.params['userId']]
-        routing_key = PREFIX + '_rpc_worker'
-        # The results of an anonymous rpc call along the ROUTING_key
-        # _rpc_worker
-        results = client.call(send_rpc.to_JSON())
+    # elif rpc.method == 'getResults':
+    #     # this method is called when a user needs to get results,
+    #     # feel free to make other rpc calls in here
+    #     # and any data analysis that is needed
+    #     send_rpc = RPC()
+    #     send_rpc.method = 'getResults'
+    #     send_rpc.params = [rpc.params['userId']]
+    #     routing_key = PREFIX + '_rpc_worker'
+    #     # The results of an anonymous rpc call along the ROUTING_key
+    #     # _rpc_worker
+    #     results = client.call(send_rpc.to_JSON())
 
-        correlation_id = properties.correlation_id
-        reply_to = properties.reply_to
-        body = results
-        reply_to = properties.reply_to
-        print "PUBLISHING TO CHANNEL %r" % body
-        print results
-        print reply_to
-        print "Routing Key %s" % routing_key
-        print properties
-        channel.basic_publish(
-            exchange='',
-            routing_key=properties.reply_to,
-            body=body,
-            properties=pika.BasicProperties(
-                correlation_id=correlation_id,
-            )
-        )
-        ch.basic_ack(delivery_tag=method.delivery_tag)
-        return 1
+    #     correlation_id = properties.correlation_id
+    #     reply_to = properties.reply_to
+    #     body = results
+    #     reply_to = properties.reply_to
+    #     print "PUBLISHING TO CHANNEL %r" % body
+    #     print results
+    #     print reply_to
+    #     print "Routing Key %s" % routing_key
+    #     print properties
+    #     channel.basic_publish(
+    #         exchange='',
+    #         routing_key=properties.reply_to,
+    #         body=body,
+    #         properties=pika.BasicProperties(
+    #             correlation_id=correlation_id,
+    #         )
+    #     )
+    #     ch.basic_ack(delivery_tag=method.delivery_tag)
+    #     return 1
     else:
         print "Couldn't find a delivery mechanism for %r" % parameters
         return 1
