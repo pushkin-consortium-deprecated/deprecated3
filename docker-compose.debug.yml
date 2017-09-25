@@ -1,16 +1,7 @@
 version: '2'
 services:
-  server:
-    image: 'DOCKERHUB_ID/server:latest'
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    ports:
-      - '80:80'
-    links:
-      - 'api:api'
   api:
-    image: 'DOCKERHUB_ID/api:latest'
+    image: 'pushkin/api:latest'
     expose:
       - '3000'
     build:
@@ -26,14 +17,33 @@ services:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
     links:
       - message-queue
-  message-queue:
-    image: 'rabbitmq:management'
+  cron:
+    image: 'pushkin/cron:latest'
+    build:
+      context: ./cron
+      dockerfile: Dockerfile
+    environment:
+      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
+      - 'API_ADDRESS=http://api:3000/api'
+      - 'DATABASE_URL=INSERT_HERE'
+      - >-
+        TRANSACTION_DATABASE_URL=INSERT_HERE
+    links:
+      - message-queue
+      - db
+      - transactiondb
+      - api
+  db:
+    image: 'postgres:latest'
+    environment:
+      - POSTGRES_DB=dev
+      - POSTGRES_USER=postgres
     expose:
-      - '5672'
+      - '5432'
     ports:
-      - '8080:15672'
+      - '5432:5432'
   db-worker:
-    image: 'DOCKERHUB_ID/db-worker:latest'
+    image: 'pushkin/db-worker:latest'
     build:
       context: ./db-worker
       dockerfile: Dockerfile
@@ -44,34 +54,30 @@ services:
       - message-queue
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - DATABASE_URL=postgres://postgres@db:5432/dev
-      - TRANSACTION_DATABASE_URL=postgres://postgres@transactiondb:5432/transactions-dev
+      - 'DATABASE_URL=INSERT_HERE'
+      - >-
+        TRANSACTION_DATABASE_URL=INSERT_HERE
     links:
       - message-queue
-      - 'db:db'
-      - 'transactiondb:transactiondb'
-  db:
-    image: 'postgres:latest'
-    environment:
-      - POSTGRES_DB=dev
-      - POSTGRES_USER=postgres
+      - db
+      - transactiondb
+  message-queue:
+    image: 'rabbitmq:management'
     expose:
-      - '5432'
+      - '5672'
     ports:
-      - '5432:5432'
-  cron:
-    image: 'DOCKERHUB_ID/cron:latest'
+      - '8080:15672'
+  server:
+    image: 'pushkin/server:latest'
     build:
-      context: ./cron
+      context: ./server
       dockerfile: Dockerfile
-    environment:
-      - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - 'DATABASE_URL=postgres://postgres@db:5432/dev'
+    ports:
+      - '80:80'
     links:
-      - message-queue
-      - 'db:db'
+      - api
   transactiondb:
-    image: 'DOCKERHUB_ID/transactiondb:latest'
+    image: 'pushkin/transactiondb:latest'
     build:
       context: ./
       dockerfile: Dockerfile.transactiondb
