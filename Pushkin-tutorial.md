@@ -219,7 +219,7 @@ publicPath: isDebug ? '/dist/' : "//YOUR_DISTRIBUTION.cloudfront.net/dist/",
 In a new Terminal window, `cd` into `front-end` and run the following script (editing the relevant parts first):
 
 ```
-npm run publish &&
+env NODE_ENV=production npm run publish &&
 cd .. &&
 cp -rf ./front-end/public/**.ico ./server/html &&
 cp -rf ./front-end/public/**.txt ./server/html &&
