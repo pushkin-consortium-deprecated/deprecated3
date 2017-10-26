@@ -15,9 +15,9 @@ Some repository and file names should be changed when customizing the setup. How
 Once you have logged into your GitHub account, navigate to the [Games With Words organization](https://github.com/gameswithwords). Click on [**gww**](https://github.com/gameswithwords/gww) and fork the repository. Change the name of the repository (Settings->Repository name). 
 Return to the [Games With Words organization](https://github.com/gameswithwords), and fork [**cron**](https://github.com/gameswithwords/cron), [**experiments**](https://github.com/gameswithwords/experiments), and [**front-end**](https://github.com/gameswithwords/front-end).
 
-##Local Deployment and Testing
+## Local Deployment and Testing
 
-###Setting Up Databases
+### Setting Up Databases
 
 Open your Postgres manager, select **New** and fill out the following fields:
 
@@ -481,7 +481,7 @@ node seeder.js NAME_OF_QUIZ
 ```
 You should repeat the second command for as many quizzes as you have. If you see the names of your stimuli it means that you were successful.
 
-###Setting up DNS in Rancher
+### Setting up DNS in Rancher
 
 Under **Catalog** find **Route 53** and click on **View Details**. Enter the AWS Secret Access Key and AWS Access Key ID for the Rancher user created earlier. Enter the following:
 
@@ -490,7 +490,7 @@ Under **Catalog** find **Route 53** and click on **View Details**. Enter the AWS
 
 You will also need to create a new Record Set on Route 53 under your domain name. The **Name** should be your domain, and the **Value** should be the URL of the load balancer.
 
-###Autoscaling
+### Autoscaling
 
 In Rancher, go to **API** -> **Webhooks**
 
