@@ -66,6 +66,8 @@ This will get compiled down in your `pushkin/docs` folder and available for view
 #### Config
 Please feel free to modify `jsdoc.conf.json` located in your main `pushkin` folder. This config file handles the main configuration of JS Docs compile settings. You could include or exclude any additional source folders for JS Docs to look in or ignore by editing the `include` and `exclude` section of this JSON file. You could also include a README as the home page of your js docs by adding `README.md` in the `include` section of this file. JS Docs looks for the first README.md it could find and make use of that.
 
+There are three config files located in `front-end`, `db-worker` and `api` folder. These config files are in control of adding routes/methods to the forum feature and auth feature, default values are `falses`. If you would like to access these features please feel free to modify these config files. Example: `forum: true`.
+
 #### Compile
 After you've added/deleted/edited/changed any your JS Docs, you will have to recompile for the changes to apply. 
 
