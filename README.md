@@ -15,7 +15,7 @@ It consists of 5 key parts
 ## Why Pushkin
 
 ## Assumptions
-1. You are somewhat familiar with isntalling programs and understand what your terminal is and how to use it.
+1. You are familiar with installing programs and understand what your terminal is and how to use it.
 2. You have access to a text editor like sublime/notepad++/etc.
 3. [Docker](http://docker.com) is installed on your machine
 
